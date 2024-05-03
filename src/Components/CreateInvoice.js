@@ -13,18 +13,27 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function CreateInvoice() {
 
-    const [itemList, setItemList] = useState([])
+    // const [itemList, setItemList] = useState([])
+
+    // const addItem = () => {
+    //     let temp = [...itemList];
+    //     temp.push(1)
+    //     setItemList(temp)
+    //     console.log(temp)
+    // }
+
+    const [itemList, setItemList] = useState([]);
 
     const addItem = () => {
-        let temp = [...itemList];
-        temp.push(1)
-        setItemList(temp)
+      setItemList(prevList => [...prevList, 1]); // Add a new item (1 in this case)
     }
-
-
-    const removeItem = (indexToRemove) => {
-        setItemList(prevItemList => prevItemList.filter((_, index) => index !== indexToRemove));
+  
+    const removeItem = () => {
+      if (itemList.length > 0) {
+        setItemList(prevList => prevList.slice(0, -1)); // Remove the last item from the array
+      }
     }
+   
 
 const currencies = [
     {
@@ -200,14 +209,11 @@ const dropdown = [
             </Box>
         </div>
        
-        {itemList.map((item, index) => (
-        <div key={index} className="mt-2">
-          {/* <div>Item {index}</div> */}
-          <IconButton aria-label="delete" onClick={() => removeItem(index)}>
+        
+          <IconButton aria-label="delete" onClick={removeItem}>
             <DeleteIcon />
           </IconButton>
-        </div>
-      ))}
+      
   </div>
 
              
