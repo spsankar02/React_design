@@ -7,12 +7,13 @@ export default function Home() {
     return (
         <div className='App'>
             <Header />
-            <div className='row p-2 ms-2 me-2 mb-2 rounded' style={{ height: '85vh', backgroundColor: '#d5d7db' }}>
-                <Sidebar />
-                <div className='col-10 p-3 rounded overflow-auto' >
+            <div className='row p-2 ms-2 me-2 mb-2 rounded overflow-auto' style={{ height: '85vh', backgroundColor: '#d5d7db' }}>
+             <Sidebar />            
+
+                <div className='col-10 p-3 rounded ' style={{marginLeft:'215px'}} >
                     <Outlet />
                 </div>
-            </div>
+                </div>
         </div>
     )
 }
