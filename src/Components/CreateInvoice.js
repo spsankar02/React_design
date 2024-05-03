@@ -10,6 +10,19 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 export default function CreateInvoice() {
 
@@ -21,6 +34,19 @@ export default function CreateInvoice() {
     //     setItemList(temp)
     //     console.log(temp)
     // }
+    const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [formData, setFormData] = useState({ name: '', address: '', phone: '' });
+  const handleSubmit = () => {
+    // Here you can perform any action with the form data, such as saving it to state, sending it to a server, etc.
+    console.log(formData);
+    setOpen(false); // Close the modal after submitting
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
     const [itemList, setItemList] = useState([]);
 
@@ -238,7 +264,7 @@ const dropdown = [
                                     <h6>19034 Verna Unions Apt. 164 - Honolulu, RI / 87535</h6>
                                     <h6>365-374-4961</h6>
                                 </div>
-                    </div>              <hr className="dashed" />
+                    </div>              
          
                         <div className="w-40 bg-white">
                     <div className="d-flex justify-content-between ">
@@ -246,9 +272,31 @@ const dropdown = [
                                 <h3>To:</h3>
                             </div>
                             <div className="w-50 mt-3" style={{ marginLeft: '350px' }}>
-                                <ModeEditIcon/>
+                                <ModeEditIcon onClick={handleOpen}/>
+                                <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <label>Name:</label>
+          <input type='text' name="name" value={formData.name} onChange={handleChange} />
+          <label>Address:</label>
+          <input type='text' name="address" value={formData.address} onChange={handleChange} />
+          <label>Phone:</label>
+          <input type='text' name="phone" value={formData.phone} onChange={handleChange} />
+          <button onClick={handleSubmit}>Submit</button>
+        </Box>
+      </Modal>
                                 </div>
+                               
                     </div>
+                    <div className="ms-3">
+                    <h5><b>{formData.name}</b></h5>
+        <h6>{formData.address}</h6>
+        <h6>{formData.phone}</h6>
+                                </div>
                     </div>
                 </div>
     <div className="d-flex justify-content-between p-3" style={{ backgroundColor: '#c9c9c9' }}>
