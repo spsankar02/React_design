@@ -240,9 +240,7 @@ const dropdown = [
             <DeleteIcon />
           </IconButton>
       
-  </div>
-
-             
+  </div>      
        )
     })
 
@@ -265,7 +263,7 @@ const dropdown = [
                                     <h6>365-374-4961</h6>
                                 </div>
                     </div>              
-         
+                            
                         <div className="w-40 bg-white">
                     <div className="d-flex justify-content-between ">
                             <div className="w-50 ms-3 mt-2">
