@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, TextField } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import BillingService from "../Services/BillingService";
 import { useNavigate } from "react-router-dom";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import {useParams } from "react-router-dom";
 
-export default function Newuser(props) {
 
+
+export default function Edituser(){
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [error, setError] = useState('');
-
-
 
     const [customerName, setCustomerName] = useState("")
     const [emailAddress, setEmailAddress] = useState("")
@@ -21,107 +19,75 @@ export default function Newuser(props) {
     const [city, setCity] = useState("")
     const [state, setState] = useState("")
     const [pincode, setPincode] = useState("")
-    const [setCountry] = useState("")
+    const [country,setCountry] = useState("")
     const [role, setRole] = useState("")
     const [companyName, setCompanyName] = useState("")
     const [phoneNo, setPhoneNo] = useState("")
 
-    const save = (e) => {
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        BillingService.getalluser()
+            .then((res) => {
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            })
+    }
+
+    useEffect(() => {
+        console.log(id)
+            BillingService.getuserbyid(id)
+                .then((res) => {
+                    const details = res.data;
+                    setCustomerName(details.customerName);
+                    setAddress(details.address);
+                    setCity(details.city);
+                    setCountry(details.country);
+                    setState(details.state);
+                    setCompanyName(details.companyName);
+                    setEmailAddress(details.emailAddress);
+                    setPhoneNo(details.phoneNo);
+                    setPincode(details.pincode);
+                    setRole(details.role);
+                })
+                .catch((error) => {
+                    console.error('Error updating details:', error);
+                });
+        
+    }, [id]);
+    
+    const Updateuser = (e) => {
         e.preventDefault();
-        const user = {
+        const updatedDetails = {
+            id: id,
             customerName: customerName,
             emailAddress: emailAddress,
             address: address,
             city: city,
             state: state,
             pincode: pincode,
-            country: "India",
+            country: country,
             role: role,
             companyName: companyName,
             phoneNo: phoneNo
-        }
-        if (!customerName.trim() || !emailAddress.trim() || !address.trim() || !city.trim() || !state.trim() || !pincode.trim() || !role.trim() || !companyName.trim() || !phoneNo.trim()) {
-            setError('All fields are required');
-        } else {
-            BillingService.createBilling(user).then(() => {
-                // navigate('/home/user');
-                setCustomerName('');
-                setEmailAddress('');
-                setAddress('');
-                setCity('');
-                setState('');
-                setPincode('');
-                // setCountry('');
-                setRole('');
-                setCompanyName('');
-                setPhoneNo('');
+        };
+    
+        BillingService.updateuser(updatedDetails)
+            .then((res) => {
+                console.log('Billing updated successfully:', res);
+                navigate('/user');
             })
-        }
-    }
-
-    const [open, setOpen] = React.useState(false);
-
-    const handleClick = () => {
-        setOpen(true);
+            .catch((error) => {
+                console.error('Error updating billing:', error);
+                // Handle error scenarios, such as displaying error messages to the user
+            });
     };
+    
+    
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-
-
-    const changecustomernamehandler = (e) => {
-        setCustomerName(e.target.value)
-        // setError('name is required');
-    }
-
-    const changeemailaddresshandler = (e) => {
-        setEmailAddress(e.target.value)
-        // setError('email is required');
-    }
-
-    const changeaddresshandler = (e) => {
-        setAddress(e.target.value)
-        // setError('address is required');
-    }
-
-    const changecityhandler = (e) => {
-        setCity(e.target.value)
-        // setError('city is required');
-    }
-
-    const changestatehandler = (e) => {
-        setState(e.target.value)
-        // setError('state is required');
-    }
-
-    const changepincodehandler = (e) => {
-        setPincode(e.target.value)
-        // setError('pincode is required');
-    }
-
-    const changecountryhandler = (e) => {
-        setCountry(e.target.value)
-    }
-
-    const changerolehandler = (e) => {
-        setRole(e.target.value)
-        // setError('role is required');
-    }
-
-    const changecompanynamehandler = (e) => {
-        setCompanyName(e.target.value)
-        // setError('company is required');
-    }
-
-    const changephonenohandler = (e) => {
-        setPhoneNo(e.target.value)
-        // setError('phoneno is required');
-    }
 
     const [file, setFile] = useState(null);
 
@@ -130,16 +96,9 @@ export default function Newuser(props) {
             setFile(URL.createObjectURL(e.target.files[0]));
         }
     };
-
-    <style>
-        .button-image:hover{
-
-        }
-    </style>
-
     return (
         <>
-            <div className="mb-3 "><h4>Create a new User</h4></div>
+            <div className="mb-3 "><h4>Edit</h4></div>
 
             <div className="d-flex justify-content-between mt-4 w-100 rounded" style={{ height: '120%' }}>
                 <div className="p-2 rounded bg-white" style={{ width: '36%', height: '80%' }}>
@@ -193,7 +152,7 @@ export default function Newuser(props) {
                                             required='true'
                                             label="Full Name"
                                             value={customerName}
-                                            onChange={changecustomernamehandler}
+                                            onChange={(e)=>setCustomerName(e.target.value)}
                                             InputLabelProps={{ required: false }}
                                         />
                                     </div>
@@ -211,7 +170,7 @@ export default function Newuser(props) {
                                             required
                                             label="Email Address"
                                             value={emailAddress}
-                                            onChange={changeemailaddresshandler}
+                                            onChange={(e)=>setEmailAddress(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -232,7 +191,7 @@ export default function Newuser(props) {
                                             required='true'
                                             label="Phone Number"
                                             value={phoneNo}
-                                            onChange={changephonenohandler}
+                                            onChange={(e)=>setPhoneNo(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -249,8 +208,8 @@ export default function Newuser(props) {
                                             required='true'
                                             label="Country"
                                             defaultValue={"India"}
-                                            // value={country}
-                                            onChange={changecountryhandler}
+                                            value={country}
+                                            onChange={(e)=>setCountry(e.target.value)}
                                             InputLabelProps={{ shrink: true, required: false }} />
                                     </div>
                                 </Box>
@@ -271,7 +230,7 @@ export default function Newuser(props) {
                                             required='true'
                                             label="State/Region"
                                             value={state}
-                                            onChange={changestatehandler}
+                                            onChange={(e)=>setState(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -288,7 +247,7 @@ export default function Newuser(props) {
                                             required
                                             label="City"
                                             value={city}
-                                            onChange={changecityhandler}
+                                            onChange={(e)=>setCity(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -309,7 +268,7 @@ export default function Newuser(props) {
                                             required='true'
                                             label="Address"
                                             value={address}
-                                            onChange={changeaddresshandler}
+                                            onChange={(e)=>setAddress(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -326,7 +285,7 @@ export default function Newuser(props) {
                                             required
                                             label="Zip/Code"
                                             value={pincode}
-                                            onChange={changepincodehandler}
+                                            onChange={(e)=>setPincode(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -347,7 +306,7 @@ export default function Newuser(props) {
                                             required='true'
                                             label="Company"
                                             value={companyName}
-                                            onChange={changecompanynamehandler}
+                                            onChange={(e)=>setCompanyName(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -364,7 +323,7 @@ export default function Newuser(props) {
                                             required
                                             label="Role"
                                             value={role}
-                                            onChange={changerolehandler}
+                                            onChange={(e)=>setRole(e.target.value)}
                                             InputLabelProps={{ required: false }} />
                                     </div>
                                 </Box>
@@ -374,25 +333,10 @@ export default function Newuser(props) {
 
                     <div className="d-flex justify-content-between">
                         <div className="w-50">
-                            {error && <div className="ms-3" style={{ color: 'red' }}>{error}</div>}
+                            {/* {error && <div className="ms-3" style={{ color: 'red' }}>{error}</div>} */}
                         </div>
                         <div className="w-50" >
-                            <button style={{ marginLeft: '57%' }} type="button" class="btn btn-dark" onClick={(e) => { save(e); handleClick(); }}>Create user</button>
-                            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}
-                             anchorOrigin={{
-                                vertical: 'top', // Change 'top' to 'bottom' if you want the Snackbar to appear at the bottom
-                                horizontal: 'right', // Change 'right' to 'left' if you want the Snackbar to appear on the left
-                            }}
-                            >
-                                <Alert
-                                    onClose={handleClose}
-                                    severity="success"
-                                    variant="filled"
-                                    sx={{ width: '100%' }}
-                                >
-                                    User Added successfully!
-                                </Alert>
-                            </Snackbar>
+                            <button style={{marginLeft:'57%'}} type="button" class="btn btn-dark" onClick={Updateuser} >Save Changes</button>
                         </div>
                     </div>
                 </div>
