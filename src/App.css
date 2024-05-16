@@ -20,8 +20,30 @@ body, html {
 }
 
 
+
+.css-pdct74-MuiTablePagination-selectLabel {
+  margin-bottom: 0; /* Adjust as needed */
+}
+
+/* Remove margin in page */
+.MuiTablePagination-displayedRows {
+  margin-bottom: 0; /* Adjust as needed */
+}
+
+.react-dialog-backdrop {
+  background-color: rgba(0, 0, 0, 0.2); /* Change the background color and opacity as needed */
+}
 /* .sideBarli:hover {
   background-color: #c5fccb;
   color: #55fa67;
   border-radius: 15px;
 } */
+
+.bxli:hover{
+  background-color: #ebebeb;
+}
+
+.tabbod:hover{
+  background-color: #ebebeb;
+}
+
