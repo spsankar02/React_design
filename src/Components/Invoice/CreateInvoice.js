@@ -22,7 +22,23 @@ export default function CreateInvoice() {
     const handleClose = () => setOpen(false);
     const [selectedDetail, setSelectedDetail] = useState(null);
     const [productDetailsList, setProductDetailsList] = useState([]);
-    const [openproduct,setOpenproduct]=useState(false);
+    const [openproduct, setOpenproduct] = useState(false);
+    const [shippingvalue, setshippingvalue] = useState('');
+    const [discountvalue, setdiscountvalue] = useState('');
+    const [taxvalue, settaxvalue] = useState('')
+
+    const handlechangeshippingvalue = (e) => {
+        setshippingvalue(e.target.value)
+    }
+
+    const handlechangediscountvalue = (e) => {
+        setdiscountvalue(e.target.value)
+    }
+
+    const handlechangetaxvalue = (e) => {
+        settaxvalue(e.target.value)
+    }
+
     const currencies = [
         {
             value: 'Paid',
@@ -42,11 +58,11 @@ export default function CreateInvoice() {
         },
     ];
 
-    const handleproductopen = ()=>{
+    const handleproductopen = () => {
         setOpenproduct(true);
     }
 
-    const handleproductclose = () =>{
+    const handleproductclose = () => {
         setOpenproduct(false);
     }
 
@@ -96,22 +112,28 @@ export default function CreateInvoice() {
             return updatedTotalList;
         });
     }
-  
 
+    const subtotal = totalList.reduce((acc, curr) => acc + curr, 0); // Sum up all values in totalList
+    
+    let overalltotal = parseFloat(subtotal);
+    let totalWithShippingPrice = overalltotal + parseFloat(shippingvalue);
+    let totalWithDiscount = totalWithShippingPrice - parseFloat(discountvalue);
+    overalltotal = totalWithDiscount; 
+    let totalWithTax = parseFloat(taxvalue / 100) * totalWithDiscount;
+    overalltotal+=totalWithTax
 
-   
+    
 
-
-    const items = itemList.map((item,index) => {
-        const selectproductdetail = productDetailsList[index]; 
+    const items = itemList.map((item, index) => {
+        const selectproductdetail = productDetailsList[index];
         const quantity = quantityList[index]; // Get quantity for the current item
-    const total = totalList[index]; // Get total for the current item
+        const total = totalList[index]; // Get total for the current item
 
 
         return (
             <div className="d-flex justify-content-between">
                 <div className="mt-2"> <i class="bi bi-plus " style={{ fontSize: '1.5em' }} onClick={handleproductopen}></i>
-                <Productforinvoice open={openproduct} onClose={handleproductclose} onproductdetail={(detail) => handleProductSelectedDetail(index, detail)} /></div>
+                    <Productforinvoice open={openproduct} onClose={handleproductclose} onproductdetail={(detail) => handleProductSelectedDetail(index, detail)} /></div>
                 <div>
                     <Box
                         component="form"
@@ -147,7 +169,7 @@ export default function CreateInvoice() {
                                 id="outlined-number"
                                 label="Hsn No"
                                 size="small"
-                                value={selectproductdetail?selectproductdetail.hsnNo:''}
+                                value={selectproductdetail ? selectproductdetail.hsnNo : ''}
                                 InputLabelProps={{
                                     shrink: true,
                                 }} />
@@ -166,7 +188,7 @@ export default function CreateInvoice() {
                                 id="outlined-select-currency"
                                 label="Mrp"
                                 size="small"
-                                value={selectproductdetail?selectproductdetail.mrp:''}
+                                value={selectproductdetail ? selectproductdetail.mrp : ''}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -191,7 +213,7 @@ export default function CreateInvoice() {
                                 size="small"
                                 placeholder="0"
                                 value={quantity}
-                            onChange={(e) => handleQuantityChange(index, e.target.value)}
+                                onChange={(e) => handleQuantityChange(index, e.target.value)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }} />
@@ -213,7 +235,7 @@ export default function CreateInvoice() {
                                 label="Price"
                                 size="small"
                                 placeholder="$  0.00"
-                                value={selectproductdetail?selectproductdetail.unitPrice:''}
+                                value={selectproductdetail ? selectproductdetail.unitPrice : ''}
                                 InputLabelProps={{
                                     shrink: true,
                                 }} />
@@ -278,20 +300,20 @@ export default function CreateInvoice() {
                         </div>
                         <div className="w-50 mt-3" style={{ marginLeft: '350px' }}>
                             <ModeEditIcon onClick={handleOpen} />
-                          
-                                <Userforinvoice open={open} onClose={handleClose} onSelectDetail={handleSelectDetail} />
-                            
+
+                            <Userforinvoice open={open} onClose={handleClose} onSelectDetail={handleSelectDetail} />
+
                         </div>
                     </div>
                     {selectedDetail && (
                         <>
-                            <div style={{marginLeft:'5%'}}>
+                            <div style={{ marginLeft: '5%' }}>
                                 <b>{selectedDetail.customerName}</b>
                             </div>
-                            <div style={{marginLeft:'5%'}}>
+                            <div style={{ marginLeft: '5%' }}>
                                 {selectedDetail.address}, {selectedDetail.city}-{selectedDetail.pincode}
                             </div>
-                            <div style={{marginLeft:'5%'}}>
+                            <div style={{ marginLeft: '5%' }}>
                                 {selectedDetail.phoneNo}
                             </div>
                         </>
@@ -313,6 +335,7 @@ export default function CreateInvoice() {
                             <TextField
                                 id="outlined-number"
                                 label="Invoice number"
+                                value="INV-"
                                 InputLabelProps={{
                                     shrink: true,
                                 }} />
@@ -381,7 +404,11 @@ export default function CreateInvoice() {
                             sx={{ '& > :not(style)': { m: 1, width: '15ch' }, }}
                             noValidate
                             autoComplete="off">
-                            <TextField id="outlined-basic" size="small" label="Shipping($)" variant="outlined" />
+                            <TextField id="outlined-basic"
+                                size="small" label="Shipping($)"
+                                value={shippingvalue}
+                                onChange={handlechangeshippingvalue}
+                                variant="outlined" />
                         </Box>
                     </div>
                     <div className="w-25">
@@ -389,7 +416,10 @@ export default function CreateInvoice() {
                             sx={{ '& > :not(style)': { m: 1, width: '15ch' }, }}
                             noValidate
                             autoComplete="off">
-                            <TextField id="outlined-basic" size="small" label="Discount($)" variant="outlined" />
+                            <TextField id="outlined-basic"
+                                value={discountvalue}
+                                onChange={handlechangediscountvalue}
+                                size="small" label="Discount($)" variant="outlined" />
                         </Box>
                     </div>
                     <div className="w-25">
@@ -397,43 +427,56 @@ export default function CreateInvoice() {
                             sx={{ '& > :not(style)': { m: 1, width: '15ch' }, }}
                             noValidate
                             autoComplete="off">
-                            <TextField id="outlined-basic" size="small" label="Taxes(%)" variant="outlined" />
+                            <TextField id="outlined-basic"
+                                value={taxvalue}
+                                onChange={handlechangetaxvalue}
+                                size="small" label="Taxes(%)" variant="outlined" />
                         </Box>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between p-2 w-100">
                     <div className="w-75"></div>
-                    <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                    <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Subtotal</div>
-                        <div className='' style={{ width: '18%' }}>-</div>
+                        <div className='' style={{ width: '30%' }}>
+                            {subtotal ? `$${subtotal}` : '-'}
+                        </div>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between p-2 w-100">
                     <div className="w-75"></div>
-                    <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                    <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Shipping</div>
-                        <div className='' style={{ width: '18%' }}>-</div>
+                        <div className='ms-0    ' style={{ width: '30%' }}>
+                            {shippingvalue ? `$${shippingvalue}` : '-'}
+                        </div>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between p-2 w-100">
                     <div className="w-75"></div>
-                    <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                    <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Discount</div>
-                        <div className='' style={{ width: '18%' }}>-</div>
+                        <div className='' style={{ width: '30%' }}>
+                            {discountvalue ? `$${discountvalue}` : '-'}
+                        </div>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between p-2 w-100">
                     <div className="w-75"></div>
-                    <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                    <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Taxes</div>
-                        <div className='' style={{ width: '18%' }}>-</div>
+                        <div className='' style={{ width: '30%' }}>
+                            {taxvalue ? `$${taxvalue}` : '-'}
+                        </div>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between p-2 w-100">
                     <div className="w-75"></div>
-                    <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                    <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''><b>Total</b></div>
-                        <div className='' style={{ width: '18%' }}>-</div>
+                        <div className='' style={{ width: '30%' }}>
+                            {overalltotal ? `$${overalltotal}` : '-'}
+                        </div>
                     </div>
                 </div>
             </div>
