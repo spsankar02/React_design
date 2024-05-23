@@ -13,7 +13,7 @@ export default function Newproduct(props) {
     const [mrp, setMrp] = useState("")
     const [productName, setProductName] = useState("")
     const [description, setDescription] = useState("")
-    const [currentStock, setCurrentStock] = useState("")
+    const [initialStock, setInitialStock] = useState("")
     const [unitPrice,setUnitPrice] = useState("")
     const [retailRate, setRetailRate] = useState("")
     const [wholesaleRate, setWholesaleRate] = useState("")
@@ -28,7 +28,7 @@ export default function Newproduct(props) {
             mrp: mrp,
             productName: productName,
             description: description,
-            currentStock: currentStock,
+            initialStock: initialStock,
             unitPrice:unitPrice,
             retailRate: retailRate,
             wholesaleRate: wholesaleRate,
@@ -36,7 +36,7 @@ export default function Newproduct(props) {
             maxQty: maxQty,
             gst: gst
         }
-        if (!productName.trim() || !description.trim() || !hsnNo.trim() || !mrp.trim() || !currentStock.trim() || !retailRate.trim() ||
+        if (!productName.trim() || !description.trim() || !hsnNo.trim() || !mrp.trim() || !initialStock.trim() || !retailRate.trim() ||
            !unitPrice.trim() || !wholesaleRate.trim() || !minQty.trim() || !maxQty.trim() || !gst.trim()) {
             setIsNewUserClicked(true);
         } else {
@@ -51,7 +51,7 @@ export default function Newproduct(props) {
     const isMrpValid = mrp.trim() !== '' || !isNewUserClicked;
     const isProductNameValid = productName.trim() !== '' || !isNewUserClicked;
     const isDescriptionValid = description.trim() !== '' || !isNewUserClicked;
-    const isCurrentStockValid = currentStock.trim() !== '' || !isNewUserClicked;
+    const isCurrentStockValid = initialStock.trim() !== '' || !isNewUserClicked;
     const isUnitPriceValid = unitPrice.trim() !== '' || !isNewUserClicked;
     const isRetailRateValid = retailRate.trim() !== '' || !isNewUserClicked;
     const isWholesaleRateValid = wholesaleRate.trim() !== '' || !isNewUserClicked;
@@ -76,7 +76,7 @@ export default function Newproduct(props) {
     }
 
     const changeCurrentStockHandler = (e) => {
-        setCurrentStock(e.target.value);
+        setInitialStock(e.target.value);
     };
 
     const changeUnitPriceHandler =(e)=>{
@@ -222,7 +222,7 @@ export default function Newproduct(props) {
                                                 required='true'
                                                 label="Current stock"
                                                 placeholder="0"
-                                                value={currentStock}
+                                                value={initialStock}
                                                 error={!isCurrentStockValid}
                                                 helperText={!isCurrentStockValid && isNewUserClicked ? 'Current stock is required' : ''}
                                                 onChange={changeCurrentStockHandler}

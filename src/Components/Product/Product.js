@@ -163,7 +163,7 @@ export default function Product() {
                                                     /></div>
                                                     <div>{detail.currentStock} In Stock</div></>
 
-                                            ) : (detail.currentStock < 25 && detail.currentStock > 0) ? (
+                                            ) : detail.currentStock <=29 && detail.currentStock > 0 ? (
                                                 <>
                                                     <div><BorderLinearProgress
                                                         className="lowstock"
@@ -243,7 +243,7 @@ export default function Product() {
                 </Snackbar>)}
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
                 <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" sx={{ width: '100%' }}>
-                    User deleted successfully!
+                    Product deleted successfully!
                 </Alert>
             </Snackbar>
         </>
