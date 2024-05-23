@@ -38,6 +38,12 @@ const BillingService = {
   },
   updateproduct: function(data){
     return axios.post(BILLING_API_BASE_URL+"/updateproductdetails/",data)
+  },
+  createinvoice: function(data){
+    return axios.post(BILLING_API_BASE_URL+"/createinvoice/",data)
+  },
+  getallinvoice: function(){
+    return axios.get(BILLING_API_BASE_URL+"/retrieveinvoicedetails")
   }
 }
 export default BillingService
