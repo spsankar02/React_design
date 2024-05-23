@@ -31,7 +31,7 @@ export default function Userforinvoice({ open, onClose, onSelectDetail }) {
             })
     }
     const handleDetailClick = (detail) => {
-        // console.log(detail)
+         console.log(detail)
         onSelectDetail(detail); // Call the onSelectDetail callback with the selected detail
         onClose(); // Close the modal
     };

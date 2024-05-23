@@ -131,7 +131,7 @@ export default function Productforinvoice({ open, onClose,onproductdetail }) {
                                                             /></div>
                                                             <div>{details.currentStock} In Stock</div></>
 
-                                                    ) : (details.currentStock < 25 && details.currentStock > 0) ? (
+                                                    ) : (details.currentStock <= 29 && details.currentStock > 0) ? (
                                                         <>
                                                             <div><BorderLinearProgress
                                                                 className="lowstock"

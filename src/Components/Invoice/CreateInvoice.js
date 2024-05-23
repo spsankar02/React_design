@@ -12,11 +12,14 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Userforinvoice from "./Userforinvoice";
 import Productforinvoice from "./Productforinvoice";
+import BillingService from "../../Services/BillingService";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 
 export default function CreateInvoice() {
 
-
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -26,6 +29,38 @@ export default function CreateInvoice() {
     const [shippingvalue, setshippingvalue] = useState('');
     const [discountvalue, setdiscountvalue] = useState('');
     const [taxvalue, settaxvalue] = useState('')
+
+    const [status, setStatus] = useState('Draft')
+    const handlesetstatus = (e) => {
+        setStatus(e.target.value)
+    }
+
+    const [createdDate, setCreatedDate] = useState(dayjs())
+    const handlecreateddate = (newvalue) => {
+        setCreatedDate(newvalue)
+    }
+
+    const [dueDate, setDueDate] = useState(dayjs())
+    const handleduedate = (newvalue) => {
+        setDueDate(newvalue)
+    }
+
+
+
+    const [orderDetails,setOrderDetails]=useState([])
+    const handleorderdetails =(e)=>{
+        setOrderDetails(e)
+    }
+
+    const [user, setUser] = useState('');
+    const handlesetuser = (detail) => {
+        console.log(detail)
+        setUser(detail)
+    }
+
+
+   
+
 
     const handlechangeshippingvalue = (e) => {
         setshippingvalue(e.target.value)
@@ -67,6 +102,7 @@ export default function CreateInvoice() {
     }
 
     const handleSelectDetail = (detail) => {
+        console.log("details:", detail)
         setSelectedDetail(detail);
     };
 
@@ -94,6 +130,7 @@ export default function CreateInvoice() {
     const [quantityList, setQuantityList] = useState(Array(itemList.length).fill(0));
     const [totalList, setTotalList] = useState(Array(itemList.length).fill(0)); // Add this line
 
+   
     // Function to update quantity for a specific item
     const handleQuantityChange = (index, value) => {
         const updatedQuantityList = [...quantityList];
@@ -114,19 +151,41 @@ export default function CreateInvoice() {
     }
 
     const subtotal = totalList.reduce((acc, curr) => acc + curr, 0); // Sum up all values in totalList
-    
+
     let overalltotal = parseFloat(subtotal);
     let totalWithShippingPrice = overalltotal + parseFloat(shippingvalue);
     let totalWithDiscount = totalWithShippingPrice - parseFloat(discountvalue);
-    overalltotal = totalWithDiscount; 
+    overalltotal = totalWithDiscount;
     let totalWithTax = parseFloat(taxvalue / 100) * totalWithDiscount;
-    overalltotal+=totalWithTax
+    overalltotal += totalWithTax
 
-    
+    const save = (e) => {
+        e.preventDefault();
+        const invoice = {
+            user: selectedDetail,
+            status: status,
+            createdDate: createdDate,
+            dueDate: dueDate,
+            orderDetails:itemList.map((_,index)=>({
+                quantityList:quantityList[index],
+                totalList:totalList[index],
+                productDetailsList:productDetailsList[index]
+            })),
+            overalltotal:overalltotal
+
+        }
+
+        BillingService.createinvoice(invoice).then(() => {
+            navigate("/home/invoice")
+        })
+    }
+
+
 
     const items = itemList.map((item, index) => {
         const selectproductdetail = productDetailsList[index];
-        const quantity = quantityList[index]; // Get quantity for the current item
+        const quantity = quantityList[index];
+        console.log(quantity)
         const total = totalList[index]; // Get total for the current item
 
 
@@ -301,7 +360,7 @@ export default function CreateInvoice() {
                         <div className="w-50 mt-3" style={{ marginLeft: '350px' }}>
                             <ModeEditIcon onClick={handleOpen} />
 
-                            <Userforinvoice open={open} onClose={handleClose} onSelectDetail={handleSelectDetail} />
+                            <Userforinvoice open={open} value={user} onChange={handlesetuser} onClose={handleClose} onSelectDetail={handleSelectDetail} />
 
                         </div>
                     </div>
@@ -331,7 +390,7 @@ export default function CreateInvoice() {
                         noValidate
                         autoComplete="off"
                     >
-                        <div >
+                        <div>
                             <TextField
                                 id="outlined-number"
                                 label="Invoice number"
@@ -355,9 +414,11 @@ export default function CreateInvoice() {
                                 select
                                 label="Status"
                                 defaultValue="Draft"
+                                value={status}
+                                onChange={handlesetstatus}
                             >
                                 {currencies.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
+                                    <MenuItem key={option.value} value={option.value} >
                                         {option.label}
                                     </MenuItem>
                                 ))}
@@ -369,6 +430,9 @@ export default function CreateInvoice() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker label="Date create"
+                                value={createdDate}
+                                renderInput={(params) => <TextField {...params} />}
+                                onChange={handlecreateddate}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -377,7 +441,11 @@ export default function CreateInvoice() {
                 <div className="w-25 p-2 ms-2 me-2 mt-1  mb-1">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker label="Due date" />
+                            <DatePicker label="Due date"
+                                value={dueDate}
+                                renderInput={(params) => <TextField {...params} />}
+                                onChange={handleduedate}
+                            />
                         </DemoContainer>
                     </LocalizationProvider>
                 </div>
@@ -393,7 +461,7 @@ export default function CreateInvoice() {
                         <div className="w-25">
                             <Box sx={{ '& button': { m: 1 } }}>
 
-                                <Button style={{ color: 'green', width: '125%' }} onClick={addItem}>
+                                <Button style={{ color: 'green', width: '125%' }} value={orderDetails} onChange={handleorderdetails} onClick={addItem}>
                                     <AddIcon style={{ fontSize: '1.4em' }} />Add item</Button>
 
                             </Box>
@@ -448,7 +516,7 @@ export default function CreateInvoice() {
                     <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Shipping</div>
                         <div className='ms-0    ' style={{ width: '30%' }}>
-                            {shippingvalue ? `$${shippingvalue}` : '-'}
+                            <div style={{color:'#00bf2d'}}>{shippingvalue ? `+$${shippingvalue}` : <span style={{ color: 'black' }}>-</span>}</div>
                         </div>
                     </div>
                 </div>
@@ -457,7 +525,7 @@ export default function CreateInvoice() {
                     <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Discount</div>
                         <div className='' style={{ width: '30%' }}>
-                            {discountvalue ? `$${discountvalue}` : '-'}
+                           <div style={{color:'#ff5a36'}}> {discountvalue ? `-$${discountvalue}` : <span style={{ color: 'black' }}>-</span>}</div>
                         </div>
                     </div>
                 </div>
@@ -466,7 +534,7 @@ export default function CreateInvoice() {
                     <div className="d-flex justify-content-between" style={{ width: '30%' }}>
                         <div className=''>Taxes</div>
                         <div className='' style={{ width: '30%' }}>
-                            {taxvalue ? `$${taxvalue}` : '-'}
+                            <div style={{color:'#00bf2d'}}>{taxvalue ? `%$${taxvalue}` : <span style={{ color: 'black' }}>-</span>}</div>
                         </div>
                     </div>
                 </div>
@@ -481,7 +549,7 @@ export default function CreateInvoice() {
                 </div>
             </div>
             <div className=" p-4">
-                <button type="button" class="btn btn-dark" style={{ marginLeft: "94%" }}>create</button>
+                <button type="button" class="btn btn-dark" style={{ marginLeft: "94%" }} onClick={save}>create</button>
             </div>
         </>
 
