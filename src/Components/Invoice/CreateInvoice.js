@@ -150,7 +150,7 @@ export default function CreateInvoice() {
         });
     }
 
-    const subtotal = totalList.reduce((acc, curr) => acc + curr, 0); // Sum up all values in totalList
+    let subtotal = totalList.reduce((acc, curr) => acc + curr, 0); // Sum up all values in totalList
 
     let overalltotal = parseFloat(subtotal);
     let totalWithShippingPrice = overalltotal + parseFloat(shippingvalue);
@@ -158,11 +158,11 @@ export default function CreateInvoice() {
     overalltotal = totalWithDiscount;
     let totalWithTax = parseFloat(taxvalue / 100) * totalWithDiscount;
     overalltotal += totalWithTax
-
+    let subtotalstring = subtotal.toString();
     const save = (e) => {
         e.preventDefault();
         const invoice = {
-            user: selectedDetail,
+            user: selectedDetail.id,
             status: status,
             createdDate: createdDate,
             dueDate: dueDate,
@@ -171,6 +171,10 @@ export default function CreateInvoice() {
                 totalList:totalList[index],
                 productDetailsList:productDetailsList[index]
             })),
+            subtotal:subtotalstring,
+            shippingvalue:shippingvalue,
+            discountvalue:discountvalue,
+            taxvalue:taxvalue,
             overalltotal:overalltotal
 
         }

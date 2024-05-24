@@ -83,7 +83,7 @@ export default function Invoice() {
                 <TableRow key={details.id}>
                   <TableCell><Checkbox /></TableCell>
                   <TableCell style={{ width: '17%' }}>
-                    <div>{details.customerName}</div>
+                    <div>{details.order.user.customerName}</div>
                     <div>INV-{details.id}</div>
                   </TableCell>
                   <TableCell>{details.createdDate}</TableCell>
