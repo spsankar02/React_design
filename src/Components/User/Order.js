@@ -41,7 +41,7 @@ export default function Order() {
             <div className="mb-4">
                 <h2>Orders</h2>
             </div>
-            <Paper>
+            <Paper className="mb-5">
                 <TableContainer>
                     <Table>
                         <TableHead style={{ backgroundColor: '#dedede' }}>
