@@ -11,6 +11,7 @@ import Product from './Components/Product/Product';
 import Newproduct from './Components/Product/Newproduct';
 import Editproduct from './Components/Product/Editproduct';
 import Viewinvoice from './Components/Invoice/Viewinvoice';
+import Order from './Components/User/Order';
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
           <Route path='product' element={<Product />}></Route>
           <Route path='product/newproduct' element={<Newproduct />}></Route>
           <Route path='product/editproduct/:id' element={<Editproduct />}></Route>
-          <Route path='invoice/viewinvoice' element={<Viewinvoice />}></Route>
+          <Route path='invoice/viewinvoice/:id' element={<Viewinvoice />}></Route>
+          <Route path='order' element={<Order />}></Route>
         </Route>
         <Route path='' element={<Navigate to='home' />} />
       </Routes>
