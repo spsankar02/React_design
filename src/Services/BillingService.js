@@ -44,6 +44,12 @@ const BillingService = {
   },
   getallinvoice: function(){
     return axios.get(BILLING_API_BASE_URL+"/retrieveinvoicedetails")
+  },
+  getinvoiceById: function(data){
+    return axios.get(BILLING_API_BASE_URL+"/getinvoicebyid/"+data)
+  },
+  getallorder: function(){
+    return axios.get(BILLING_API_BASE_URL+"/retrieveorderdetails")
   }
 }
 export default BillingService
