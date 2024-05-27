@@ -47,8 +47,8 @@ export default function Invoice() {
       })
   }
   
-  const handleviewinvoice =()=>{
-    navigate("/home/invoice/viewinvoice")
+  const handleviewinvoice =(id)=>{
+    navigate(`viewinvoice/${id}`)
   }
 
   return (
@@ -79,8 +79,10 @@ export default function Invoice() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoice.map(details => (
-                <TableRow key={details.id}>
+              {invoice
+               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(details => (
+                <TableRow key={details.id} className="tabbod">
                   <TableCell><Checkbox /></TableCell>
                   <TableCell style={{ width: '17%' }}>
                     <div>{details.order.user.customerName}</div>
@@ -113,7 +115,7 @@ export default function Invoice() {
                     <Button style={{ color: "#a3a2a2" }}>
                       <ModeEditIcon />
                     </Button>
-                    <Button onClick={handleviewinvoice} style={{ color: "#a3a2a2" }}>
+                    <Button onClick={()=>handleviewinvoice(details.id)} style={{ color: "#a3a2a2" }}>
                       <VisibilityIcon  />
                     </Button>
                     <Button style={{ color: '#f77272' }}><DeleteIcon /></Button>
