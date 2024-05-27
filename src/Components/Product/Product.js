@@ -141,7 +141,7 @@ export default function Product() {
                             {product
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((detail) => (
-                                    <TableRow key={detail.id}>
+                                    <TableRow key={detail.id} className="tabbod">
                                         <TableCell><Checkbox /></TableCell>
                                         <TableCell style={{ width: '30%' }}>{detail.productName}</TableCell>
                                         <TableCell style={{ width: '15%' }}><div>{detail.hsnNo}</div></TableCell>
