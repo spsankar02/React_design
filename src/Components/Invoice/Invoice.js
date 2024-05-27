@@ -63,7 +63,7 @@ export default function Invoice() {
               <i class="bi bi-plus " style={{ fontSize: '1.0em' }}></i>New Invoice</button></Link>
         </div>
       </div>
-      <Paper>
+      <Paper className="mb-5">
         <TableContainer>
           <Table>
             <TableHead style={{ backgroundColor: '#dedede' }}>
