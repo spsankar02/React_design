@@ -116,7 +116,7 @@ export default function Product() {
         <>
             <div className="d-flex justify-content-between" style={{ height: '15%' }}>
                 <div>
-                    <h2>Products</h2>
+                <b><h2 style={{fontFamily:'Brandon Grotesque Black',fontWeight:'bolder'}}>Products</h2></b>
                 </div>
                 <div>
                     <Link to='newproduct' className="text-black" style={{ textDecoration: 'none' }}>
@@ -127,7 +127,7 @@ export default function Product() {
             <Paper className="mb-5" sx={{ widht: '100%' }}>
                 <TableContainer>
                     <Table>
-                        <TableHead style={{ backgroundColor: '#dedede' }}>
+                        <TableHead style={{ backgroundColor: '#f4ebff' }}>
                             <TableRow>
                                 <TableCell><Checkbox /></TableCell>
                                 <TableCell style={{ width: '30%' }}>Product Name</TableCell>
