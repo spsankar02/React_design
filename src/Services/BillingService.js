@@ -50,6 +50,9 @@ const BillingService = {
   },
   getallorder: function(){
     return axios.get(BILLING_API_BASE_URL+"/retrieveorderdetails")
+  },
+  deleteinvoice: function(data){
+    return axios.post(BILLING_API_BASE_URL+"/deleteInvoicedetails/",data)
   }
 }
 export default BillingService
