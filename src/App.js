@@ -12,6 +12,7 @@ import Newproduct from './Components/Product/Newproduct';
 import Editproduct from './Components/Product/Editproduct';
 import Viewinvoice from './Components/Invoice/Viewinvoice';
 import Order from './Components/User/Order';
+import EditInvoice from './Components/Invoice/EditInvoice';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path='product/editproduct/:id' element={<Editproduct />}></Route>
           <Route path='invoice/viewinvoice/:id' element={<Viewinvoice />}></Route>
           <Route path='order' element={<Order />}></Route>
+          <Route path='invoice/editinvoice/:id' element={<EditInvoice />}></Route>
         </Route>
         <Route path='' element={<Navigate to='home' />} />
       </Routes>
