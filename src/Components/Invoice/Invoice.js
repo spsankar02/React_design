@@ -234,7 +234,7 @@ export default function Invoice() {
     <>
       <div className="d-flex justify-content-between" style={{ height: '10%' }}>
         <div>
-          <b><h2 style={{fontFamily:'Brandon Grotesque Black',fontWeight:'bolder'}}>List</h2></b>
+          <b><h2 style={{ fontFamily: 'Brandon Grotesque Black', fontWeight: 'bolder' }}>List</h2></b>
         </div>
         <div>
           <Link to='newinvoice' className="text-black" style={{ textDecoration: 'none' }}>
@@ -248,55 +248,57 @@ export default function Invoice() {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList onChange={handleChange}>
+              <TabList onChange={handleChange}
+                TabIndicatorProps={{ style: { backgroundColor: "#d9bcf7" } }} // Change the color here
+              >
                 <Tab label={
                   <span>
-                    <span style={{ verticalAlign: 'middle',color:'black' }}>All</span>
-                    <Box sx={{ display: 'inline-block',backgroundColor:'#30302f',color:'white',  marginLeft:'3px',padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
+                    <span style={{ verticalAlign: 'middle', color: 'black' }}>All</span>
+                    <Box sx={{ display: 'inline-block', backgroundColor: '#30302f', color: 'white', marginLeft: '3px', padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
                       <span style={{ verticalAlign: 'middle', marginLeft: '2px' }}>{invoice.length}</span>
                     </Box>
                   </span>
                 } value="1" />
                 <Tab label={
                   <span>
-                    <span style={{ verticalAlign: 'middle',color:'black' }}>Paid</span>
-                    <Box sx={{ display: 'inline-block',backgroundColor:'#daffd4',color:'#16a300', border: '', marginLeft:'3px',padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
+                    <span style={{ verticalAlign: 'middle', color: 'black' }}>Paid</span>
+                    <Box sx={{ display: 'inline-block', backgroundColor: '#daffd4', color: '#16a300', border: '', marginLeft: '3px', padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
                       <span style={{ verticalAlign: 'middle', marginLeft: '1px' }}>
-                      {invoice.filter(inv => inv.status.includes('Paid')).length}</span>
+                        {invoice.filter(inv => inv.status.includes('Paid')).length}</span>
                     </Box>
                   </span>
-                } 
-                value="Paid" />
+                }
+                  value="Paid" />
                 <Tab label={
                   <span>
-                    <span style={{ verticalAlign: 'middle',color:'black' }}>Pending</span>
-                    <Box sx={{ display: 'inline-block',backgroundColor:'#fce6a9',color:'#916901', border: '', marginLeft:'3px',padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
+                    <span style={{ verticalAlign: 'middle', color: 'black' }}>Pending</span>
+                    <Box sx={{ display: 'inline-block', backgroundColor: '#fce6a9', color: '#916901', border: '', marginLeft: '3px', padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
                       <span style={{ verticalAlign: 'middle', marginLeft: '1px' }}>
-                      {invoice.filter(inv => inv.status.includes('Pending')).length}</span>
+                        {invoice.filter(inv => inv.status.includes('Pending')).length}</span>
                     </Box>
                   </span>
-                }  
-                value="Pending" />
+                }
+                  value="Pending" />
                 <Tab label={
                   <span>
-                    <span style={{ verticalAlign: 'middle',color:'black' }}>Overdue</span>
-                    <Box sx={{ display: 'inline-block',backgroundColor:'#fcb7a9',color:'#9e1b00', border: '', marginLeft:'3px',padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
+                    <span style={{ verticalAlign: 'middle', color: 'black' }}>Overdue</span>
+                    <Box sx={{ display: 'inline-block', backgroundColor: '#fcb7a9', color: '#9e1b00', border: '', marginLeft: '3px', padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
                       <span style={{ verticalAlign: 'middle', marginLeft: '1px' }}>
-                      {invoice.filter(inv => inv.status.includes('Overdue')).length}</span>
+                        {invoice.filter(inv => inv.status.includes('Overdue')).length}</span>
                     </Box>
                   </span>
-                }   
-                value="Overdue" />
+                }
+                  value="Overdue" />
                 <Tab label={
                   <span>
-                    <span style={{ verticalAlign: 'middle',color:'black' }}>Draft</span>
-                    <Box sx={{ display: 'inline-block',backgroundColor:'#c9c9c9',color:'#6e6e6e', border: '', marginLeft:'3px',padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
+                    <span style={{ verticalAlign: 'middle', color: 'black' }}>Draft</span>
+                    <Box sx={{ display: 'inline-block', backgroundColor: '#c9c9c9', color: '#6e6e6e', border: '', marginLeft: '3px', padding: '2px 6px', borderRadius: '4px', textAlign: 'center' }}>
                       <span style={{ verticalAlign: 'middle', marginLeft: '1px' }}>
-                      {invoice.filter(inv => inv.status.includes('Draft')).length}</span>
+                        {invoice.filter(inv => inv.status.includes('Draft')).length}</span>
                     </Box>
                   </span>
-                }    
-                value="Draft" />
+                }
+                  value="Draft" />
               </TabList>
             </Box>
             {/* <TabPanel value="1"></TabPanel> 
@@ -360,7 +362,7 @@ export default function Invoice() {
               <TableRow>
                 {(startDate || endDate || searchTerm) && (
                   <TableCell colSpan={4}>
-                    <div className="mb-2"><b>{filteredInvoices.length}</b> <span style={{color:'#787878'}}>results found</span></div>
+                    <div className="mb-2"><b>{filteredInvoices.length}</b> <span style={{ color: '#787878' }}>results found</span></div>
                     {startDate && (
                       <Chip
                         label={`Start Date: ${startDate.format('MM/DD/YYYY')}`}
