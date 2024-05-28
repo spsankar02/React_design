@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Box, TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -13,11 +13,13 @@ import AddIcon from '@mui/icons-material/Add';
 import Userforinvoice from "./Userforinvoice";
 import Productforinvoice from "./Productforinvoice";
 import BillingService from "../../Services/BillingService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
 
-export default function CreateInvoice() {
+export default function EditInvoice() {
+    const { id } = useParams();
+    const [invoice, setInvoice] = useState({});
 
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
@@ -29,6 +31,19 @@ export default function CreateInvoice() {
     const [shippingvalue, setshippingvalue] = useState('');
     const [discountvalue, setdiscountvalue] = useState('');
     const [taxvalue, settaxvalue] = useState('')
+
+    useEffect(() => {
+        const fetchBilling = async () => {
+            try {
+                const response = await BillingService.getinvoiceById(id);
+                setInvoice(response.data);
+            } catch (error) {
+                console.error('Error fetching billing data:', error);
+            }
+        };
+
+        fetchBilling();
+    }, [id]);
 
     const [status, setStatus] = useState('Draft')
     const handlesetstatus = (e) => {
@@ -54,6 +69,7 @@ export default function CreateInvoice() {
 
     const [user, setUser] = useState('');
     const handlesetuser = (detail) => {
+        setInvoice(detail)
         console.log(detail)
         setUser(detail)
     }
@@ -63,14 +79,17 @@ export default function CreateInvoice() {
 
 
     const handlechangeshippingvalue = (e) => {
+        setInvoice(e.target.value)
         setshippingvalue(e.target.value)
     }
 
     const handlechangediscountvalue = (e) => {
+        setInvoice(e.target.value)
         setdiscountvalue(e.target.value)
     }
 
     const handlechangetaxvalue = (e) => {
+        setInvoice(e.target.value)
         settaxvalue(e.target.value)
     }
 
@@ -102,6 +121,7 @@ export default function CreateInvoice() {
     }
 
     const handleSelectDetail = (detail) => {
+        setInvoice(detail)
         console.log("details:", detail)
         setSelectedDetail(detail);
     };
@@ -194,6 +214,9 @@ export default function CreateInvoice() {
 
 
         return (
+            <>
+            {invoice
+                .map(invoicedetail=>(
             <div className="d-flex justify-content-between">
                 <div className="mt-2"> <i class="bi bi-plus " style={{ fontSize: '1.5em' }} onClick={handleproductopen}></i>
                     <Productforinvoice open={openproduct} onClose={handleproductclose} onproductdetail={(detail) => handleProductSelectedDetail(index, detail)} /></div>
@@ -211,7 +234,7 @@ export default function CreateInvoice() {
                                 id="outlined-number"
                                 label="Title"
                                 size="small"
-                                value={selectproductdetail ? selectproductdetail.productName : ''}
+                                value={invoice.order.orderDetails.product.productName}
                                 InputLabelProps={{
                                     shrink: true,
                                 }} />
@@ -333,7 +356,8 @@ export default function CreateInvoice() {
                     <DeleteIcon />
                 </IconButton>
 
-            </div>
+            </div>))}
+            </>
         )
     })
 
@@ -368,19 +392,20 @@ export default function CreateInvoice() {
 
                         </div>
                     </div>
-                    {selectedDetail && (
+                    
                         <>
+                        {invoice.order && invoice.order.user &&(<>
                             <div style={{ marginLeft: '5%' }}>
-                                <b>{selectedDetail.customerName}</b>
+                                <b>{invoice.order.user.customerName}</b>
                             </div>
                             <div style={{ marginLeft: '5%' }}>
-                                {selectedDetail.address}, {selectedDetail.city}-{selectedDetail.pincode}
+                                {invoice.order.user.address}, {invoice.order.user.city}-{invoice.order.user.pincode}
                             </div>
                             <div style={{ marginLeft: '5%' }}>
-                                {selectedDetail.phoneNo}
-                            </div>
+                                {invoice.order.user.phoneNo}
+                            </div></>)}
                         </>
-                    )}
+                    
 
                 </div>
             </div>
@@ -478,7 +503,10 @@ export default function CreateInvoice() {
                             autoComplete="off">
                             <TextField id="outlined-basic"
                                 size="small" label="Shipping($)"
-                                value={shippingvalue}
+                                value={invoice.shipmentTotal}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 onChange={handlechangeshippingvalue}
                                 variant="outlined" />
                         </Box>
@@ -489,7 +517,10 @@ export default function CreateInvoice() {
                             noValidate
                             autoComplete="off">
                             <TextField id="outlined-basic"
-                                value={discountvalue}
+                                value={invoice.discount}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 onChange={handlechangediscountvalue}
                                 size="small" label="Discount($)" variant="outlined" />
                         </Box>
@@ -500,7 +531,10 @@ export default function CreateInvoice() {
                             noValidate
                             autoComplete="off">
                             <TextField id="outlined-basic"
-                                value={taxvalue}
+                                value={invoice.taxValue}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 onChange={handlechangetaxvalue}
                                 size="small" label="Taxes(%)" variant="outlined" />
                         </Box>
