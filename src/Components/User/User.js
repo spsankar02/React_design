@@ -103,7 +103,7 @@ const handleCloseSnackbar = () => setOpenSnackbar(false);
         <>
             <div className="d-flex justify-content-between" style={{ height: '15%' }}>
                 <div>
-                    <h2>Users</h2>
+                <b><h2 style={{fontFamily:'Brandon Grotesque Black',fontWeight:'bolder'}}>Users</h2></b>
                 </div>
                 <div>
                     <Link to='newuser' className="text-black" style={{ textDecoration: 'none' }}>
@@ -115,7 +115,7 @@ const handleCloseSnackbar = () => setOpenSnackbar(false);
             <Paper className='mb-5' sx={{ width: '100%' }}>
                 <TableContainer>
                     <Table >
-                        <TableHead style={{ backgroundColor: '#dedede' }}>
+                        <TableHead style={{ backgroundColor: '#f4ebff' }}>
                             <TableRow>
                                 <TableCell><Checkbox /></TableCell>
                                 <TableCell style={{ width: '30%'}}>Name</TableCell>

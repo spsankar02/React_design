@@ -39,12 +39,12 @@ export default function Order() {
     return (
         <>
             <div className="mb-4">
-                <h2>Orders</h2>
+            <b><h2 style={{fontFamily:'Brandon Grotesque Black',fontWeight:'bolder'}}>Orders</h2></b>
             </div>
             <Paper className="mb-5">
                 <TableContainer>
                     <Table>
-                        <TableHead style={{ backgroundColor: '#dedede' }}>
+                        <TableHead style={{ backgroundColor: '#f4ebff' }}>
                             <TableRow>
                                 <TableCell><Checkbox /></TableCell>
                                 <TableCell><b>Order</b></TableCell>
